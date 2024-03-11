@@ -19,7 +19,7 @@ public class ExcelService {
         return clientRepository.findAll();
     }
 
-    public void save(MultipartFile file) throws IOException {
+    public void insertData(MultipartFile file) throws IOException {
         List<Client> clients = ExcelUtil.excelToData(file.getInputStream());
         clientRepository.saveAll(clients);
     }

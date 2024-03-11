@@ -23,12 +23,10 @@ public class ClientController {
 
     @PostMapping("/upload")
     public ResponseEntity<Response> insertFile(@RequestParam("file")MultipartFile file) throws IOException {
-
         if(ExcelUtil.isExcelFormat(file)) {
-            excelService.save(file);
+            excelService.insertData(file);
             return ResponseEntity.status(HttpStatus.OK).body(new Response("Uploaded the file successfully: " + file.getOriginalFilename()));
         }
-
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Please upload an excel file"));
     }
 
@@ -36,11 +34,9 @@ public class ClientController {
     public ResponseEntity<List<Client>> getAllClients() {
         try {
             List<Client> clientList = excelService.getAllClients();
-
             if (clientList.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
-
             return new ResponseEntity<>(clientList, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -51,11 +47,9 @@ public class ClientController {
     public ResponseEntity<List<Client>> getClientByName(@PathVariable(value = "name") String name) {
         try {
             List<Client> clientList = excelService.getByFirstName(name.toUpperCase(Locale.ROOT));
-
             if (clientList.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
-
             return new ResponseEntity<>(clientList, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
