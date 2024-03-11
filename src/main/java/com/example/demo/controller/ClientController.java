@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 @RequestMapping("/api/v1/excel")
@@ -35,6 +36,21 @@ public class ClientController {
     public ResponseEntity<List<Client>> getAllClients() {
         try {
             List<Client> clientList = excelService.getAllClients();
+
+            if (clientList.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+
+            return new ResponseEntity<>(clientList, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/client/{name}")
+    public ResponseEntity<List<Client>> getClientByName(@PathVariable(value = "name") String name) {
+        try {
+            List<Client> clientList = excelService.getByFirstName(name.toUpperCase(Locale.ROOT));
 
             if (clientList.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);

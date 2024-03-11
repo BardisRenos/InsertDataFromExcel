@@ -23,4 +23,9 @@ public class ExcelService {
         List<Client> clients = ExcelUtil.excelToData(file.getInputStream());
         clientRepository.saveAll(clients);
     }
+
+    public List<Client> getByFirstName(String name) {
+
+        return clientRepository.findByName(name);
+    }
 }
